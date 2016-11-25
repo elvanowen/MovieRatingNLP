@@ -1,7 +1,56 @@
 from TwitterSearch import *
+import preprocessor as p
+from nltk.corpus import stopwords
+from nltk.stem.wordnet import WordNetLemmatizer
+from nltk.stem.lancaster import LancasterStemmer
+import string
+import nltk
+import re
+from optparse import OptionParser
+import sys
+
+def tokenize(sentences):
+    '''Split sentences into constituent words'''
+    for sent in nltk.sent_tokenize(sentences.lower()):
+        for word in nltk.word_tokenize(sent):
+            yield word
+
+def lemmatization(word):
+    '''Word stemmer; find the root of the word. E.g. 'dogs' becomes 'dog'''
+    lmt = WordNetLemmatizer()
+    word = word.lower()
+    word = lmt.lemmatize(word)
+    return word
+
+def removePunctuation(s):
+    '''Remove punctuation'''
+    exclude = set(string.punctuation)
+    return ''.join(ch for ch in s if ch not in exclude)
+
+def preprocess(tweet):
+    preprocessed = ''
+    stemmer = LancasterStemmer()
+
+    tweet = p.clean(tweet)
+
+    for token in tokenize(tweet):
+        word = lemmatization(removePunctuation(stemmer.stem(token)))
+        preprocessed += word + ' '
+
+    return re.sub("\s\s+", ' ', preprocessed).strip()
+
+parser = OptionParser()
+parser.add_option("-m", "--movie", dest="movie", help="get tweets of movie title")
+
+(options, args) = parser.parse_args()
+movie = options.movie
+
+if movie == '':
+    sys.exit()
+
 try:
     tso = TwitterSearchOrder() # create a TwitterSearchOrder object
-    tso.set_keywords(['Doctor Strange']) # let's define all words we would like to have a look for
+    tso.set_keywords([movie]) # let's define all words we would like to have a look for
     tso.set_language('en') # we want to see German tweets only
     tso.set_include_entities(False) # and don't give us all those entity information
 
@@ -15,7 +64,7 @@ try:
 
      # this is where the fun actually starts :)
     for tweet in ts.search_tweets_iterable(tso):
-        print( '@%s tweeted: %s' % ( tweet['user']['screen_name'], tweet['text'] ) )
+        preprocessed = preprocess(tweet['text'])
 
 except TwitterSearchException as e: # take care of all those ugly errors if there are some
     print(e)
