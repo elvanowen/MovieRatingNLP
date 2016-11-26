@@ -16,7 +16,7 @@ def confidence(ups, downs):
 def countRating(vectorizer, classifier, tweets):
 	test_vectors = vectorizer.transform(tweets)
 	prediction_rbf = classifier.predict(test_vectors)
-	pos = prediction_rbf.count('pos')
-	neg = prediction_rbf.count('neg')
+	pos = (prediction_rbf=='pos').sum()
+	neg = (prediction_rbf=='neg').sum()
 	print (confidence(pos,neg))
 	return confidence(pos,neg)
