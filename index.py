@@ -23,7 +23,7 @@ try:
 
     if model.isModelExists():
         print("Loading Classifier Model...")        
-        vectorizer, classifier = model.LoadModel()
+        vectorizer, classifier = model.loadModel()
     else:
         print("Building Classifier Model...")
         # Start building models

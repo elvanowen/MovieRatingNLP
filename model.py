@@ -42,8 +42,7 @@ def buildModel():
     vectorizer = TfidfVectorizer(tokenizer=preprocess, sublinear_tf=True)
     train_vectors = vectorizer.fit_transform(train_data)
     test_vectors = vectorizer.transform(test_data)
-    with open("vectorizer.pkl", 'wb') as vectorizerFile:
-        joblib.dump(vectorizer, vectorizerFile)
+    joblib.dump(vectorizer, 'vectorizer.pkl')
 
     # Perform classification with SVM, kernel=linear
     classifier = svm.LinearSVC()
@@ -61,12 +60,12 @@ def buildModel():
     print("Results for SVC(kernel=linear)")
     print("Training time: %fs; Prediction time: %fs" % (time_linear_train, time_linear_predict))
     print(classification_report(test_labels, prediction))
-    print(accuracy_score(test_labels, prediction) * 100 + "%")
+    print(accuracy_score(test_labels, prediction))
 
     return vectorizer, classifier
 
 def loadModel():
-    vectorizer = joblib.load(open("vectorizer.pkl", "rb"))
+    vectorizer = joblib.load('vectorizer.pkl')
     model = joblib.load('model.pkl')
     return vectorizer, model
 
