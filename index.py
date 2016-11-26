@@ -46,14 +46,11 @@ try:
 
         # Calculate Ratings based on already obtained tweets
         # Calculation is done real time, based on the number of tweets fetched
-        if (numberOfTweets % 100) == 0:
-            # Code
-            # Code
-            # Code
-            rating.countRating(classifier,tweets)
+        if (numberOfTweets % 10) == 0:
+            rating = rating.countRating(classifier, tweets)
 
             # Print Movie ratings
-            # print(movie.title() + " Rating : " + rating, end='\r')
+            print(movie.title() + " Rating : " + rating, end='\r')
             pass
 
 except TwitterSearchException as e: # take care of all those ugly errors if there are some

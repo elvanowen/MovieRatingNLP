@@ -1,7 +1,6 @@
 from math import sqrt
 from sklearn.feature_extraction.text import TfidfVectorizer
-import preprocess
-
+from preprocess import preprocess
 
 def confidence(ups, downs):
 	#code from http://stackoverflow.com/questions/10029588/python-implementation-of-the-wilson-score-interval
@@ -16,7 +15,7 @@ def confidence(ups, downs):
 
 def countRating(classifier, tweets):
 	vectorizer = TfidfVectorizer(tokenizer=preprocess, sublinear_tf=True)
-	test_vectors = vectorizer.transform(tweets)
+	test_vectors = vectorizer.fit_transform(tweets)
 	prediction_rbf = classifier.predict(test_vectors)
 	pos = prediction_rbf.count('pos')
 	neg = prediction_rbf.count('neg')
