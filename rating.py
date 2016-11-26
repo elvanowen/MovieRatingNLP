@@ -13,9 +13,8 @@ def confidence(ups, downs):
     phat = float(ups) / n
     return ((phat + z*z/(2*n) - z * sqrt((phat*(1-phat)+z*z/(4*n))/n))/(1+z*z/n))
 
-def countRating(classifier, tweets):
-	vectorizer = TfidfVectorizer(tokenizer=preprocess, sublinear_tf=True)
-	test_vectors = vectorizer.fit_transform(tweets)
+def countRating(vectorizer, classifier, tweets):
+	test_vectors = vectorizer.transform(tweets)
 	prediction_rbf = classifier.predict(test_vectors)
 	pos = prediction_rbf.count('pos')
 	neg = prediction_rbf.count('neg')

@@ -92,4 +92,4 @@ def buildModel():
     # print("Training time: %fs; Prediction time: %fs" % (time_liblinear_train, time_liblinear_predict))
     # print(classification_report(test_labels, prediction_liblinear))
 
-    return classifier_rbf
+    return vectorizer, classifier_rbf

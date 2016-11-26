@@ -32,7 +32,7 @@ try:
     tweets = []
 
     # Start building models
-    classifier = model.buildModel()
+    vectorizer, classifier = model.buildModel()
 
     for tweet in ts.search_tweets_iterable(tso):
         preprocessed = preprocess.preprocess(tweet['text'])
@@ -47,7 +47,7 @@ try:
         # Calculate Ratings based on already obtained tweets
         # Calculation is done real time, based on the number of tweets fetched
         if (numberOfTweets % 10) == 0:
-            rating = rating.countRating(classifier, tweets)
+            rating = rating.countRating(vectorizer, classifier, tweets)
 
             # Print Movie ratings
             print(movie.title() + " Rating : " + rating, end='\r')
