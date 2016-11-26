@@ -16,6 +16,15 @@ if movie == '' or movie == None:
     sys.exit()
 
 try:
+    numberOfTweets = 1
+    tweets = []
+    ratingValue = 0
+
+    print("Building Classifier Model...")
+    # Start building models
+    vectorizer, classifier = model.buildModel()
+
+    print("Retrieving Tweets...")
     tso = TwitterSearchOrder()
     tso.set_keywords([movie])
     tso.set_language('en')
@@ -27,14 +36,6 @@ try:
         access_token = '1348353366-ofrMAMNiFfz102VY9c3MXdTrsAD2c4Dq91QiWVD',
         access_token_secret = 'Io7orEnOvE2Rv2sdiASLRkLTVFA93DmSyF4r1i9CYQCXn'
     )
-
-    numberOfTweets = 1
-    tweets = []
-    ratingValue = 0
-
-    # Start building models
-    vectorizer, classifier = model.buildModel()
-
     for tweet in ts.search_tweets_iterable(tso):
         preprocessed = preprocess.preprocess(tweet['text'])
         tweets.append(preprocessed)
