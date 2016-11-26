@@ -4,6 +4,7 @@ import sys
 import preprocess
 import model
 import rating
+from log import log
 
 parser = OptionParser()
 parser.add_option("-m", "--movie", dest="movie", help="get tweets of movie title")
@@ -37,6 +38,7 @@ try:
         access_token_secret = 'Io7orEnOvE2Rv2sdiASLRkLTVFA93DmSyF4r1i9CYQCXn'
     )
     for tweet in ts.search_tweets_iterable(tso):
+        log(tweet['text'])
         preprocessed = preprocess.preprocess(tweet['text'])
         tweets.append(preprocessed)
         # print("---------")
