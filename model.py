@@ -84,7 +84,6 @@ def buildModel():
     # Print results in a nice table
     print("Results for SVC(kernel=rbf)")
     print("Training time: %fs; Prediction time: %fs" % (time_rbf_train, time_rbf_predict))
-    print(prediction_rbf)
     print(classification_report(test_labels, prediction_rbf))
     # print("Results for SVC(kernel=linear)")
     # print("Training time: %fs; Prediction time: %fs" % (time_linear_train, time_linear_predict))
