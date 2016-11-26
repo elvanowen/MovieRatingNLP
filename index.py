@@ -42,14 +42,16 @@ try:
         access_token_secret = 'Io7orEnOvE2Rv2sdiASLRkLTVFA93DmSyF4r1i9CYQCXn'
     )
     for tweet in ts.search_tweets_iterable(tso):
-        log(tweet['text'])
         preprocessed = preprocess.preprocess(tweet['text'])
         tweets.append(preprocessed)
+
+        log(tweet['text'] + '\nLABELS : ' + str(classifier.predict(vectorizer.transform([preprocessed]))[0]).upper())
+
         # print("---------")
         # print(tweet['text'])
         # print(preprocessed)
         # print("---------")
-        if numberOfTweets == 100: break
+        if numberOfTweets == 1000: break
         else: numberOfTweets = numberOfTweets + 1
 
         # Calculate Ratings based on already obtained tweets
