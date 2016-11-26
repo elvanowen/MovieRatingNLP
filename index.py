@@ -48,7 +48,7 @@ try:
         # Calculate Ratings based on already obtained tweets
         # Calculation is done real time, based on the number of tweets fetched
         if (numberOfTweets % 10) == 0:
-            ratingValue = rating.countRating(vectorizer, classifier, tweets)
+            ratingValue = rating.getRating(vectorizer, classifier, tweets)
 
             # Print Movie ratings
             print('{} Rating ({} tweets) : {} / 5.0'.format(movie.title(),  numberOfTweets, float("{0:.3f}".format(ratingValue * 5))), end='\r')
