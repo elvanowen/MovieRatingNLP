@@ -1,40 +1,62 @@
 from TwitterSearch import *
 import preprocessor as p
+import nltk
+from nltk.corpus import wordnet
 from nltk.corpus import stopwords
+from nltk.tokenize import TweetTokenizer
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.stem.lancaster import LancasterStemmer
+from nltk import pos_tag
 import string
-import nltk
 import re
 from optparse import OptionParser
 import sys
 
-def tokenize(sentences):
-    '''Split sentences into constituent words'''
-    for sent in nltk.sent_tokenize(sentences.lower()):
-        for word in nltk.word_tokenize(sent):
-            yield word
+def get_wordnet_pos(treebank_tag):
+    if treebank_tag.startswith('J'):
+        return wordnet.ADJ
+    elif treebank_tag.startswith('V'):
+        return wordnet.VERB
+    elif treebank_tag.startswith('N'):
+        return wordnet.NOUN
+    elif treebank_tag.startswith('R'):
+        return wordnet.ADV
+    else:
+        return ''
 
-def lemmatization(word):
-    '''Word stemmer; find the root of the word. E.g. 'dogs' becomes 'dog'''
+def tokenize(tweet):
+    tknzr = TweetTokenizer()
+    tokens = tknzr.tokenize(tweet.lower())
+    print(tokens)
+
+    no_punc_tokens = []
+    for token in tokens:
+        stripped = re.sub(r'\B[:,.!]\B', '', token)
+        if stripped != '': no_punc_tokens.append(stripped)
+
+    tokens_pos = pos_tag(no_punc_tokens)
+    print(tokens_pos)
+    for (word, tags) in tokens_pos:
+        yield (word, tags)
+
+def lemmatization(word, tags):
     lmt = WordNetLemmatizer()
-    word = word.lower()
-    word = lmt.lemmatize(word)
-    return word
+    tag = get_wordnet_pos(tags)
+    if tag != '': word = lmt.lemmatize(word, pos=tag)
+    else: word = lmt.lemmatize(word)
 
-def removePunctuation(s):
-    '''Remove punctuation'''
-    exclude = set(string.punctuation)
-    return ''.join(ch for ch in s if ch not in exclude)
+    return word
 
 def preprocess(tweet):
     preprocessed = ''
-    stemmer = LancasterStemmer()
 
+    # Since training data does not contain any hashtags or emojis or smilies
+    # it is useless to have them, then just remove all of them
+    # p.set_options(p.OPT.URL, p.OPT.MENTION, p.OPT.NUMBER, p.OPT.RESERVED)
     tweet = p.clean(tweet)
 
-    for token in tokenize(tweet):
-        word = lemmatization(removePunctuation(stemmer.stem(token)))
+    for (token, tags) in tokenize(tweet):
+        word = lemmatization(token, tags)
         preprocessed += word + ' '
 
     return re.sub("\s\s+", ' ', preprocessed).strip()
@@ -45,7 +67,8 @@ parser.add_option("-m", "--movie", dest="movie", help="get tweets of movie title
 (options, args) = parser.parse_args()
 movie = options.movie
 
-if movie == '':
+if movie == '' or movie == None:
+    print('Error. Usage: python index.py --movie "<movie>"')
     sys.exit()
 
 try:
@@ -65,6 +88,11 @@ try:
      # this is where the fun actually starts :)
     for tweet in ts.search_tweets_iterable(tso):
         preprocessed = preprocess(tweet['text'])
+        print()
+        print("---------")
+        print(tweet['text'])
+        print(preprocessed)
+        print("---------")
 
 except TwitterSearchException as e: # take care of all those ugly errors if there are some
     print(e)
