@@ -21,9 +21,13 @@ try:
     tweets = []
     ratingValue = 0
 
-    print("Building Classifier Model...")
-    # Start building models
-    vectorizer, classifier = model.buildModel()
+    if model.isModelExists():
+        print("Loading Classifier Model...")        
+        vectorizer, classifier = model.LoadModel()
+    else:
+        print("Building Classifier Model...")
+        # Start building models
+        vectorizer, classifier = model.buildModel()
 
     print("Retrieving Tweets...")
     tso = TwitterSearchOrder()
