@@ -29,6 +29,10 @@ try:
 
     numberOfTweets = 1
     tweets = []
+
+    # Start building models
+    classifier = model.buildModel()
+
     for tweet in ts.search_tweets_iterable(tso):
         preprocessed = preprocess.preprocess(tweet['text'])
         tweets.append(preprocessed)
@@ -39,10 +43,11 @@ try:
         if numberOfTweets == 100: break
         else: numberOfTweets = numberOfTweets + 1
 
-    # Start building models after getting tweets data
-    classifier = model.buildModel()
+        # Calculate Ratings based on already obtained tweets
+        # Calculation is done real time, based on the number of tweets fetched
 
-    # Calculate Ratings
+        # Print Movie ratings
+        # print(movie.title() + " Rating : " + rating, end='\r')
 
 except TwitterSearchException as e: # take care of all those ugly errors if there are some
     print(e)
