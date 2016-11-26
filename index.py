@@ -3,6 +3,7 @@ from optparse import OptionParser
 import sys
 import preprocess
 import model
+import rating
 
 parser = OptionParser()
 parser.add_option("-m", "--movie", dest="movie", help="get tweets of movie title")
@@ -49,6 +50,7 @@ try:
             # Code
             # Code
             # Code
+            rating.countRating(classifier,tweets)
 
             # Print Movie ratings
             # print(movie.title() + " Rating : " + rating, end='\r')
