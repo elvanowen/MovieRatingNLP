@@ -40,7 +40,7 @@ try:
         else: numberOfTweets = numberOfTweets + 1
 
     # Start building models after getting tweets data
-    model.buildModel()
+    classifier = model.buildModel()
 
     # Calculate Ratings
 

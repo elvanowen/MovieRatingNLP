@@ -37,18 +37,12 @@ def buildModel():
         for fname in fnamelist[0:100]:
             with open(os.path.join(dirname, fname), 'r', encoding="utf8") as f:
                 content = f.read()
-                lowers = content.lower()
-                translator = str.maketrans({key: None for key in string.punctuation})
-                no_punctuation = lowers.translate(translator)
                 train_data.append(content)
                 train_labels.append(curr_class)
         # for fname in fnamelist[11251:]:
         for fname in fnamelist[100:110]:
             with open(os.path.join(dirname, fname), 'r', encoding="utf8") as f:
                 content = f.read()
-                lowers = content.lower()
-                translator = str.maketrans({key: None for key in string.punctuation})
-                no_punctuation = lowers.translate(translator)
                 test_data.append(content)
                 test_labels.append(curr_class)
 
@@ -90,6 +84,7 @@ def buildModel():
     # Print results in a nice table
     print("Results for SVC(kernel=rbf)")
     print("Training time: %fs; Prediction time: %fs" % (time_rbf_train, time_rbf_predict))
+    print(prediction_rbf)
     print(classification_report(test_labels, prediction_rbf))
     # print("Results for SVC(kernel=linear)")
     # print("Training time: %fs; Prediction time: %fs" % (time_linear_train, time_linear_predict))
@@ -97,3 +92,5 @@ def buildModel():
     # print("Results for LinearSVC()")
     # print("Training time: %fs; Prediction time: %fs" % (time_liblinear_train, time_liblinear_predict))
     # print(classification_report(test_labels, prediction_liblinear))
+
+    return classifier_rbf
