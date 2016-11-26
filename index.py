@@ -51,11 +51,11 @@ try:
             ratingValue = rating.countRating(vectorizer, classifier, tweets)
 
             # Print Movie ratings
-            print('{} Rating : {} / 5.0'.format(movie.title(), float("{0:.3f}".format(ratingValue * 5))), end='\r')
+            print('{} Rating ({} tweets) : {} / 5.0'.format(movie.title(),  numberOfTweets, float("{0:.3f}".format(ratingValue * 5))), end='\r')
 
     # Print Movie ratings
     print(end='\r')
-    print('{} Rating : {} / 5.0'.format(movie.title(), float("{0:.3f}".format(ratingValue * 5))))
+    print('{} Rating ({} tweets) : {} / 5.0'.format(movie.title(),  numberOfTweets, float("{0:.3f}".format(ratingValue * 5))))
 
 except TwitterSearchException as e: # take care of all those ugly errors if there are some
     print(e)
