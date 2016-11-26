@@ -30,6 +30,7 @@ try:
 
     numberOfTweets = 1
     tweets = []
+    ratingValue = 0
 
     # Start building models
     vectorizer, classifier = model.buildModel()
@@ -47,11 +48,14 @@ try:
         # Calculate Ratings based on already obtained tweets
         # Calculation is done real time, based on the number of tweets fetched
         if (numberOfTweets % 10) == 0:
-            rating = rating.countRating(vectorizer, classifier, tweets)
+            ratingValue = rating.countRating(vectorizer, classifier, tweets)
 
             # Print Movie ratings
-            print(movie.title() + " Rating : " + rating, end='\r')
-            pass
+            print('{} Rating : {} / 5.0'.format(movie.title(), float("{0:.3f}".format(ratingValue * 5))), end='\r')
+
+    # Print Movie ratings
+    print(end='\r')
+    print('{} Rating : {} / 5.0'.format(movie.title(), float("{0:.3f}".format(ratingValue * 5))))
 
 except TwitterSearchException as e: # take care of all those ugly errors if there are some
     print(e)
